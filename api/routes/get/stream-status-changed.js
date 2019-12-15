@@ -6,8 +6,9 @@ class ApiFunction extends EventEmitter
 	process(req)
 	{
 		console.log(req.params);
-		console.log("-------------------");
+		console.log(req.query);
 		console.log(req.body);
+		console.log("-------------------");
 
 		this.emit("complete", {
 			success: true
