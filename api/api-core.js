@@ -38,7 +38,10 @@ module.exports = {
 		this.app.post("/stream-status-changed", (req, res) => {
 			const route = new routes.post.streamStatusChanged();
 			route.on("error", (message) => {
-				res.status(400).json(message);
+				res.json({
+					success: false,
+					error: message
+				});
 			});
 			route.on("complete", (message) => {
 				res.json(message);

@@ -5,7 +5,7 @@ const streamsSchema = new mongoose.Schema({
 	isLive: { type: Boolean, default: false },
 	userId: { type: String, default: "" },
 	userName: { type: String, default: "" },
-	gameId: { type: String, default: "" },
+	game: { type: mongoose.Schema.Types.ObjectId, ref: "Games", sparse: true },
 	type: { type: String, default: "" },
 	title: { type: String, default: "" },
 	thumbnail: { type: String, default: "" }

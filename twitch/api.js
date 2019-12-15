@@ -27,6 +27,15 @@ module.exports = {
 				"Client-ID": config.twitch.clientId
 			}
 		});
+	},
+
+	getGame(id)
+	{
+		return axios.get(config.twitch.apiUrl + "/games?id=" + id, {
+			headers: {
+				"Client-ID": config.twitch.clientId
+			}
+		});
 	}
 
 };
