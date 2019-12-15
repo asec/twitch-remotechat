@@ -5,14 +5,19 @@ class ApiFunction extends EventEmitter
 
 	process(req)
 	{
-		console.log(req.params);
-		console.log(req.query);
-		console.log(req.body);
-		console.log("-------------------");
+		const challenge = req.query["hub.challenge"];
 
-		this.emit("complete", {
-			success: true
-		});
+		if (!challenge)
+		{
+			this.emit("error", {
+				success: false,
+				error: "Invalid or non-existent challenge token"
+			});
+		}
+		else
+		{
+			this.emit("complete", challenge);
+		}
 	}
 
 }

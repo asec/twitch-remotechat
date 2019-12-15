@@ -26,8 +26,11 @@ module.exports = {
 
 		this.app.get("/stream-status-changed", (req, res) => {
 			const route = new routes.get.streamStatusChanged();
+			route.on("error", (message) => {
+				res.status(400).json(message);
+			});
 			route.on("complete", (message) => {
-				res.json(message);
+				res.send(message);
 			});
 			route.process(req);
 		});
