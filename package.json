@@ -1,0 +1,19 @@
+{
+  "name": "twitch-remotechat",
+  "version": "1.0.0",
+  "description": "A remote chat viewer API for my twitch channel",
+  "main": "api.js",
+  "scripts": {
+    "run": "nodemon api.js"
+  },
+  "author": "Roland Zsámboki",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "mongoose": "^5.8.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.2"
+  }
+}
