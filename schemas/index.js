@@ -1,5 +1,6 @@
 module.exports = {
 	
-	Subscriptions: require("./subscriptions")
+	Subscriptions: require("./subscriptions"),
+	AccessToken: require("./accessToken")
 
 };

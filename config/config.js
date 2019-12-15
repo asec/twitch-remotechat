@@ -18,7 +18,10 @@ module.exports = {
 		userId: 475650268,
 		clientId: secret.clientId,
 		clientSecret: secret.clientSecret,
-		url: "https://api.twitch.tv/helix"
+		apiUrl: "https://api.twitch.tv/helix",
+		oauthUrl: "https://id.twitch.tv/oauth2",
+		statusCallback: "http://3.120.37.149:7332/stream-status-changed",
+		secret: "xV!k?]GH+#Y!,fDuCZB]49gw#tspaZ)Q"
 	}
 
 };

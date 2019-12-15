@@ -1,15 +1,6 @@
 const db = require("./utils/db");
 	api = require("./api/api-core"),
-	schemas = require("./schemas/index");
+	loop = require("./loop/loop");
 
-schemas.Subscriptions.findOne({ type: "main" }, (err, item) => {
-	if (err)
-	{
-		console.error(err);
-		return;
-	}
-
-	console.log(item);
-});
-
-api.init();
+loop.init();
+api.init(loop);

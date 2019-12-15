@@ -4,7 +4,8 @@ const subscriptionsSchema = new mongoose.Schema({
 	type: { type: String, default: "" },
 	topic: { type: String, default: "" },
 	callback: { type: String, default: "" },
-	expires: { type: Date }
+	expiration: { type: Number, default: 0 },
+	confirmed: { type: Boolean, default: false }
 }, {
 	timestamps: {
 		createdAt: "created",
