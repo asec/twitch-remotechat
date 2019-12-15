@@ -11,9 +11,6 @@ module.exports = {
 	mongodb: {
 		uri: "mongodb://localhost:27017/twitch-remote-chat"
 	},
-	dbt: {
-		SUBSCRIPTIONS: "subscriptions"
-	},
 	twitch: {
 		userId: 475650268,
 		clientId: secret.clientId,
