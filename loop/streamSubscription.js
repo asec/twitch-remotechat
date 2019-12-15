@@ -12,7 +12,7 @@ class StreamSubscription extends EventEmitter
 		this.entity = null;
 		this.activeUntil = null;
 		//this.leaseSeconds = 864000;
-		this.leaseSeconds = 0;
+		this.leaseSeconds = 10;
 	}
 
 	load()
@@ -72,8 +72,7 @@ class StreamSubscription extends EventEmitter
 	calcActivity(dateFrom, seconds)
 	{
 		this.activeUntil = dateFrom;
-		//this.activeUntil.setSeconds(this.activeUntil.getSeconds() + seconds);
-		this.activeUntil.setSeconds(this.activeUntil.getSeconds() + 864000);
+		this.activeUntil.setSeconds(this.activeUntil.getSeconds() + seconds);
 	}
 
 	isActive()
