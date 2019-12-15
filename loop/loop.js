@@ -5,10 +5,13 @@ const config = require("../config/config"),
 class Loop
 {
 
-	accessToken = null;
-	streamSubscription = null;
-	interval = null;
-	initialized = false;
+	constructor()
+	{
+		this.accessToken = null;
+		this.streamSubscription = null;
+		this.interval = null;
+		this.initialized = false;
+	}
 
 	init()
 	{
