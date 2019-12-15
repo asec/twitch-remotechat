@@ -6,6 +6,10 @@ module.exports = {
 
 	post: {
 		streamStatusChanged: require("./post/stream-status-changed")
+	},
+
+	put: {
+		chat: require("./put/chat")
 	}
 
 };

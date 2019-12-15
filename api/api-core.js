@@ -48,6 +48,20 @@ module.exports = {
 			});
 			route.process(req);
 		});
+
+		this.app.put("/chat", (req, res) => {
+			const route = new routes.put.chat();
+			route.on("error", (message) => {
+				res.json({
+					success: false,
+					error: message
+				});
+			});
+			route.on("complete", (message) => {
+				res.json(message);
+			});
+			route.process(req);
+		});
 	}
 
 };
