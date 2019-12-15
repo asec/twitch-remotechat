@@ -11,8 +11,7 @@ class StreamSubscription extends EventEmitter
 		super();
 		this.entity = null;
 		this.activeUntil = null;
-		//this.leaseSeconds = 864000;
-		this.leaseSeconds = 10;
+		this.leaseSeconds = 864000;
 	}
 
 	load()
