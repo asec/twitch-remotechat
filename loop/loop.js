@@ -5,9 +5,9 @@ const config = require("../config/config"),
 class Loop
 {
 
-	accessToken;
-	streamSubscription;
-	interval;
+	accessToken = null;
+	streamSubscription = null;
+	interval = null;
 	initialized = false;
 
 	init()

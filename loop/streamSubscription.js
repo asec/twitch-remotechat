@@ -6,8 +6,8 @@ const EventEmitter = require("events"),
 class StreamSubscription extends EventEmitter
 {
 
-	entity;
-	activeUntil;
+	entity = null;
+	activeUntil = null;
 	//leaseSeconds = 864000;
 	leaseSeconds = 0;
 

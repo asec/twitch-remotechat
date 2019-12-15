@@ -5,8 +5,8 @@ const EventEmitter = require("events"),
 class AccessToken extends EventEmitter
 {
 
-	entity;
-	activeUntil;
+	entity = null;
+	activeUntil = null;
 
 	load()
 	{
