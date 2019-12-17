@@ -1,12 +1,13 @@
 const EventEmitter = require("events"),
 	schemas = require("../../../schemas/index"),
+	transform = require("../../../schemas/transformations"),
 	mongoose = require("mongoose"),
 	TwitchApi = require("../../../twitch/api");
 
 class ApiFunction extends EventEmitter
 {
 
-	process(req)
+	process(req, io)
 	{
 		var headers = req.headers;
 		var data = req.body.data;
@@ -20,6 +21,10 @@ class ApiFunction extends EventEmitter
 
 			if (!data || !data.length)
 			{
+				io.emit("stream-status-changed", {
+					isLive: false
+				});
+
 				this.emit("complete", {
 					success: true
 				});
@@ -77,6 +82,9 @@ class ApiFunction extends EventEmitter
 											this.emit("error", err);
 											return;
 										}
+
+										item.game = game;
+										io.emit("stream-status-changed", new transform.Streams(item));
 						
 										this.emit("complete", {
 											success: true
@@ -109,6 +117,9 @@ class ApiFunction extends EventEmitter
 								this.emit("error", err);
 								return;
 							}
+
+							item.game = game;
+							io.emit("stream-status-changed", new transform.Streams(item));
 			
 							this.emit("complete", {
 								success: true
@@ -136,6 +147,8 @@ class ApiFunction extends EventEmitter
 						this.emit("error", err);
 						return;
 					}
+
+					io.emit("stream-status-changed", new transform.Streams(item));
 	
 					this.emit("complete", {
 						success: true

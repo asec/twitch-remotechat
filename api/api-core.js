@@ -22,8 +22,12 @@ module.exports = {
 		});
 
 		io.on("connection", (socket) => {
-			console.log("WS: Connected");
-		})
+			console.log("WS: Connected @" + (new Date()).toLocaleString());
+
+			socket.on("disconnect", (reason) => {
+				console.log("WS: Disconnected @" + (new Date()).toLocaleString(), reason);
+			});
+		});
 
 		app.get("/", (req, res) => {
 			res.json({
@@ -53,7 +57,7 @@ module.exports = {
 			route.on("complete", (message) => {
 				res.json(message);
 			});
-			route.process(req);
+			route.process(req, io);
 		});
 
 		app.put("/chat", (req, res) => {

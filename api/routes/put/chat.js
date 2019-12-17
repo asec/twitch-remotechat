@@ -1,6 +1,7 @@
 const EventEmitter = require("events"),
 	schemas = require("../../../schemas/index"),
-	mongoose = require("mongoose");
+	mongoose = require("mongoose"),
+	transform = require("../../../schemas/transformations");
 
 class ApiFunction extends EventEmitter
 {
@@ -32,11 +33,7 @@ class ApiFunction extends EventEmitter
 					return;
 				}
 
-				io.emit("chat", {
-					channel: chat.channel,
-					context: chat.context,
-					message: chat.message
-				});
+				io.emit("chat", new transform.Chats(chat));
 
 				this.emit("complete", {
 					success: true,

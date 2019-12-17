@@ -1,5 +1,6 @@
 const EventEmitter = require("events"),
-	schemas = require("../../../schemas");
+	schemas = require("../../../schemas"),
+	transform = require("../../../schemas/transformations");
 
 class ApiFunction extends EventEmitter
 {
@@ -32,11 +33,7 @@ class ApiFunction extends EventEmitter
 				let data = [];
 				for (let i = 0; i < items.length; i++)
 				{
-					data.push({
-						channel: items[i].channel,
-						context: items[i].context,
-						message: items[i].message
-					});
+					data.push(new transform.Chats(items[i]));
 				}
 				this.emit("complete", {
 					success: true,

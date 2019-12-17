@@ -1,5 +1,6 @@
 const EventEmitter = require("events"),
-	schemas = require("../../../schemas/index");
+	schemas = require("../../../schemas/index"),
+	transform = require("../../../schemas/transformations");
 
 class ApiFunction extends EventEmitter
 {
@@ -24,20 +25,7 @@ class ApiFunction extends EventEmitter
 
 			this.emit("complete", {
 				success: true,
-				data: {
-					id: stream.sid,
-					title: stream.title,
-					isLive: stream.isLive,
-					userId: stream.userId,
-					userName: stream.userName,
-					game: stream.game ? {
-						id: stream.game.gid,
-						name: stream.game.name,
-						image: stream.game.image
-					} : null,
-					type: stream.type,
-					thumbnail: stream.thumbnail
-				}
+				data: new transform.Streams(stream)
 			});
 		});
 	}
