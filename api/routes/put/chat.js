@@ -5,7 +5,7 @@ const EventEmitter = require("events"),
 class ApiFunction extends EventEmitter
 {
 
-	process(req)
+	process(req, io)
 	{
 		schemas.Streams.findOne().sort({ updated: -1 }).exec((err, stream) => {
 			if (err)
@@ -31,6 +31,12 @@ class ApiFunction extends EventEmitter
 					this.emit("error", err);
 					return;
 				}
+
+				io.emit("chat", {
+					channel: chat.channel,
+					context: chat.context,
+					message: chat.message
+				});
 
 				this.emit("complete", {
 					success: true,

@@ -1,7 +1,9 @@
 module.exports = {
 
 	get: {
-		streamStatusChanged: require("./get/stream-status-changed")
+		streamStatusChanged: require("./get/stream-status-changed"),
+		stream: require("./get/stream"),
+		chat: require("./get/chat")
 	},
 
 	post: {

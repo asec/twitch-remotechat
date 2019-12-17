@@ -1,4 +1,6 @@
 const express = require("express"),
+	httpWrapper = require("http"),
+	socketIo = require("socket.io"),
 	cors = require("cors"),
 	bodyParser = require("body-parser"),
 	config = require("../config/config"),
@@ -6,25 +8,30 @@ const express = require("express"),
 
 module.exports = {
 
-	app: express(),
-
 	init: function(loop)
 	{
-		this.app.use(cors());
-		this.app.use(bodyParser.json());
-		this.app.use(bodyParser.urlencoded({ extended: true }));
+		const app = express();
+		const http = httpWrapper.createServer(app);
+		const io = socketIo(http);
+		app.use(cors());
+		app.use(bodyParser.json());
+		app.use(bodyParser.urlencoded({ extended: true }));
 
-		this.app.listen(config.api.port, () => {
+		http.listen(config.api.port, () => {
 			console.info("Server started on " + config.api.port);
 		});
 
-		this.app.get("/", (req, res) => {
+		io.on("connection", (socket) => {
+			console.log("WS: Connected");
+		})
+
+		app.get("/", (req, res) => {
 			res.json({
 				success: true
 			});
 		});
 
-		this.app.get("/stream-status-changed", (req, res) => {
+		app.get("/stream-status-changed", (req, res) => {
 			const route = new routes.get.streamStatusChanged();
 			route.on("error", (message) => {
 				res.status(400).json(message);
@@ -35,7 +42,7 @@ module.exports = {
 			route.process(req, loop);
 		});
 
-		this.app.post("/stream-status-changed", (req, res) => {
+		app.post("/stream-status-changed", (req, res) => {
 			const route = new routes.post.streamStatusChanged();
 			route.on("error", (message) => {
 				res.json({
@@ -49,8 +56,22 @@ module.exports = {
 			route.process(req);
 		});
 
-		this.app.put("/chat", (req, res) => {
+		app.put("/chat", (req, res) => {
 			const route = new routes.put.chat();
+			route.on("error", (message) => {
+				res.json({
+					success: false,
+					error: message
+				});
+			});
+			route.on("complete", (message) => {
+				res.json(message);
+			});
+			route.process(req, io);
+		});
+
+		app.get("/stream", (req, res) => {
+			const route = new routes.get.stream();
 			route.on("error", (message) => {
 				res.json({
 					success: false,
@@ -62,6 +83,21 @@ module.exports = {
 			});
 			route.process(req);
 		});
+
+		app.get("/chat", (req, res) => {
+			const route = new routes.get.chat();
+			route.on("error", (message) => {
+				res.json({
+					success: false,
+					error: message
+				});
+			});
+			route.on("complete", (message) => {
+				res.json(message);
+			});
+			route.process(req);
+		});
+
 	}
 
 };
