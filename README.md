@@ -4,13 +4,22 @@ A RESTful API (and websocket push interface) written in `node` that you can use 
 
 ## Table of Contents
 1. [REST API](#rest-api)
+	1. [Get Stream](#get-stream)
+	2. [Get Chat](#get-chat)
 2. [Websocket API](#websocket-api)
+	1. [Message: Stream status changed](#message-stream-status-changed)
+	2. [Message: Chat](#message-chat)
 3. [REST endpoints for the Twitch API](#rest-endpoints-for-the-twitch-api)
+	1. [Stream status change subscription validation](#stream-status-change-subscription-validation)
+	2. [Stream status change notification](#stream-status-change-notification)
+	3. [Chat sent by chat bot](#chat-sent-by-chat-bot)
 
 
 ## REST API
 
 > http://localhost:7332
+
+### Get Stream
 
 ```http
 GET /stream
@@ -18,6 +27,7 @@ GET /stream
 Gets the latest stream status of the specified user.
 
 **Parameters:**
+
 Name | Type | Required? | Description
 ---- | ---- | --------- | -----------
 `user` | number | ✔ | The userid of the streamer whose stream status you already subscribed for.
@@ -44,6 +54,7 @@ Name | Type | Required? | Description
 }
 ```
 ---
+### Get Chat
 ```http
 GET /chat
 ```
@@ -52,6 +63,7 @@ Gets all of the logged chat messages belonging to the current stream session. It
 If we dont get valid stream data we consider the stream to have went offline and will not establish a new stream session. Chat messages sent while the stream is offline will be attached to the previous live stream session.
 
 **Parameters:**
+
 Name | Type | Required? | Description
 ---- | ---- | --------- | -----------
 `user` | number | ✔ | The userid of the streamer. It will get the latest stream session and list only the messages attached to that.
@@ -97,7 +109,10 @@ Name | Type | Required? | Description
 ```
 
 ## Websocket API
+
 > ws://localhost:7332
+
+### Message: Stream status changed
 ```http
 MESSAGE stream-status-changed
 ```
@@ -121,6 +136,7 @@ This event notifies the client that a stream status has changed. This message co
 }
 ```
 ---
+### Message: Chat
 ```http
 MESSAGE chat
 ```
@@ -164,8 +180,9 @@ This event notifies the client that a single new chat message has just arrived f
 
 ## REST endpoints for the Twitch API
 
-> **YOU SHOULD NOT USE THESE AS THEY ARE RESERVED FOR COMMUNICATION WITH THE TWITCH API OR THE TWITCH CHAT BOT**
+> **YOU SHOULD NOT USE THESE AS THEY ARE RESERVED FOR COMMUNICATION WITH THE TWITCH API OR THE TWITCH CHAT BOT. THEY ARE NOT MEANT TO EXPOSE FUNCTIONALITY TO THE DEVELOPER.**
 
+### Stream status change subscription validation
 ```http
 GET /stream-status-changed
 ```
@@ -173,6 +190,7 @@ Whenever you subscribe to a twitch channel using the webhooks, the Twitch API wi
 
 ---
 
+### Stream status change notification
 ```http
 POST /stream-status-changed
 ```
@@ -180,6 +198,7 @@ If you successfully subscribed to the stream status change notifications with th
 
 ---
 
+### Chat sent by chat bot
 ```http
 PUT /chat
 ```
