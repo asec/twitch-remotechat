@@ -19,7 +19,8 @@ class SchemaTransformationsStreams
 			}
 		}
 		const translate = {
-			id: entity.sid,
+			id: entity._id,
+			sid: entity.sid,
 			title: entity.title,
 			isLive: entity.isLive,
 			userId: entity.userId,

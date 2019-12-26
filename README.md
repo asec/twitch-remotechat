@@ -98,7 +98,8 @@ Name | Type | Required? | Description
 {
     "success": true,
     "data": [{
-        "id": "318837873",
+		"id": "5df8dc1a89967957cce261c1",
+        "sid": "318837873",
         "title": "Another test stream.",
         "isLive": false,
         "userId": "475650268",

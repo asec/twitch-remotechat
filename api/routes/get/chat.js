@@ -7,7 +7,24 @@ class ApiFunction extends EventEmitter
 	
 	process(req)
 	{
-		schemas.Streams.findOne().sort({ _id: -1 }).exec((err, stream) => {
+		const userId = req.query.user;
+		const streamId = req.query.stream;
+
+		if (!userId)
+		{
+			this.emit("error", "Please specify a user.");
+			return;
+		}
+
+		const filter = {
+			userId: userId
+		};
+		if (streamId)
+		{
+			filter["_id"] = streamId;
+		}
+
+		schemas.Streams.findOne(filter).sort({ _id: -1 }).exec((err, stream) => {
 			if (err)
 			{
 				this.emit("error", err);
