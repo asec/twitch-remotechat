@@ -56,7 +56,7 @@ class AccessToken extends EventEmitter
 
 	isActive()
 	{
-		return (this.activeUntil.toLocaleString() > (new Date()).toLocaleString());
+		return (this.activeUntil > (new Date()));
 	}
 
 	renew()

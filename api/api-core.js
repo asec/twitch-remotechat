@@ -74,6 +74,20 @@ module.exports = {
 			route.process(req, io);
 		});
 
+		app.post("/subscribe", (req, res) => {
+			const route = new routes.post.subscribe();
+			route.on("error", (message) => {
+				res.json({
+					success: false,
+					error: message
+				});
+			});
+			route.on("complete", (message) => {
+				res.json(message);
+			});
+			route.process(req, loop);
+		});
+
 		app.get("/stream", (req, res) => {
 			const route = new routes.get.stream();
 			route.on("error", (message) => {
@@ -90,6 +104,20 @@ module.exports = {
 
 		app.get("/chat", (req, res) => {
 			const route = new routes.get.chat();
+			route.on("error", (message) => {
+				res.json({
+					success: false,
+					error: message
+				});
+			});
+			route.on("complete", (message) => {
+				res.json(message);
+			});
+			route.process(req);
+		});
+
+		app.get("/subscriptions", (req, res) => {
+			const route = new routes.get.subscriptions();
 			route.on("error", (message) => {
 				res.json({
 					success: false,

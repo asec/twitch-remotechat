@@ -1,23 +1,83 @@
 # twitch-remotechat
 
-A RESTful API (and websocket push interface) written in `node` that you can use to track the stream status of your favorite Twitch streamers and also log their chat. The main goal here was to write a desktop app that can show you the stream chat of the subscribed channels in real time. Useful to track your own chat if you only have one screen and don't want to keep checking your phone every time someone says something.
+A RESTful API (and websocket push interface) written for `nodejs` that you can use to track the stream status of your favorite Twitch streamers and also log their chat. The main goal here was to write a desktop app that can show you the stream chat of the subscribed channels in real time. Useful to track your own chat if you only have one screen and don't want to keep checking your phone every time someone says something.
 
 ## Table of Contents
+1. [Installation](#installation)
 1. [REST API](#rest-api)
+	1. [Subscribe to streamer](#subscribe-to-streamer)
+	1. [Get Subscriptions](#get-subscriptions)
 	1. [Get Stream](#get-stream)
-	2. [Get Chat](#get-chat)
-2. [Websocket API](#websocket-api)
+	1. [Get Chat](#get-chat)
+1. [Websocket API](#websocket-api)
 	1. [Message: Stream status changed](#message-stream-status-changed)
-	2. [Message: Chat](#message-chat)
-3. [REST endpoints for the Twitch API](#rest-endpoints-for-the-twitch-api)
+	1. [Message: Chat](#message-chat)
+1. [REST endpoints for the Twitch API](#rest-endpoints-for-the-twitch-api)
 	1. [Stream status change subscription validation](#stream-status-change-subscription-validation)
-	2. [Stream status change notification](#stream-status-change-notification)
-	3. [Chat sent by chat bot](#chat-sent-by-chat-bot)
+	1. [Stream status change notification](#stream-status-change-notification)
+	1. [Chat sent by chat bot](#chat-sent-by-chat-bot)
 
+
+## Installation
+```powershell
+git clone https://github.com/asec/twitch-remotechat.git
+cd ./twitch-remotechat
+npm install
+```
+You will need to rename `./config/config.secret.initial.js` to `./config/config.secret.js` and then add the client id and client secret of your own [Twitch App](https://dev.twitch.tv/console/apps).
+
+You will also need to set the ip on which the server is available from the outside. This is needed because the Twitch API sends a validation request to one of the REST API endpoints that is used to listen to the stream status change events. You will also need to open up port `7332` on your host.
+
+> If you happen to skip the second part the server should (in theory) work fine, but won't receive the stream status updates. All of your subscriptions will show up as unconfirmed.
+
+```powershell
+node api
+```
 
 ## REST API
 
 > http://localhost:7332
+
+### Subscribe to streamer
+```http
+POST /subscribe
+```
+Subscribes to notifications in stream status for the given streamer. This is not a real Twitch subscription of any kind, it just means that the server gets the notifications whenever the streamer goes online or otherwise.
+
+**Parameters:**
+
+Name | Type | Required? | Description
+---- | ---- | --------- | -----------
+`username` | string | ✔ | The name of the Twitch channel you wish to subscribe to.
+
+**Example Response:**
+```json
+{
+    "success": true,
+    "userId": "475650268"
+}
+```
+---
+
+### Get Subscriptions
+```http
+GET /subscriptions
+```
+Lists all of the currently active subscriptions in the API.
+
+**Example Response:**
+```json
+{
+    "success": true,
+    "data": [{
+		"userId": "475650268",
+		"userName": "asectortst",
+		"image": "https://static-cdn.jtvnw.net/user-default-pictures-uv/294c98b5-e34d-42cd-a8f0-140b72fba9b0-profile_image-300x300.png",
+		"confirmed": true
+	}]
+}
+```
+---
 
 ### Get Stream
 
@@ -116,9 +176,9 @@ Name | Type | Required? | Description
 ```http
 MESSAGE stream-status-changed
 ```
-This event notifies the client that a stream status has changed. This message contains the same `data` as the `GET /stream?latest=true` API call. Instead of an array only the single stream object is attached. You will get messages for all streamers that you subscribed for using the REST API.
+This event notifies the client that a stream status has changed. The message contains the same `data` as the `GET /stream?latest=true` API call. Instead of an array only the single stream object is attached. You will get messages for all streamers that you subscribed for using the REST API.
 
-**Parameter example:**
+**Parameter Example:**
 ```json
 {
 	"id": "318837873",

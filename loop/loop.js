@@ -1,6 +1,6 @@
 const config = require("../config/config"),
 	at = require("./accessToken"),
-	ss = require("./streamSubscription");
+	ss = require("./streamSubscriptionManager");
 
 class Loop
 {
@@ -25,7 +25,7 @@ class Loop
 			console.log(this.accessToken.get());
 			if (!this.initialized)
 			{
-				this.streamSubscription.load();
+				this.streamSubscription.load(this.accessToken.get());
 			}
 			else
 			{
@@ -40,6 +40,12 @@ class Loop
 			this.start();
 		});
 		this.accessToken.load();
+	}
+
+	add(userId)
+	{
+		this.stop();
+		this.streamSubscription.add(userId);
 	}
 
 	start()

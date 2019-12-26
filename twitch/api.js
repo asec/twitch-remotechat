@@ -14,12 +14,22 @@ module.exports = {
 		});
 	},
 
-	subscribe(leaseSeconds)
+	getWebhookSubscriptions(first, accessToken)
+	{
+		first = first || 20;
+		return axios.get(config.twitch.apiUrl + "/webhooks/subscriptions?first=" + first, {
+			headers: {
+				"Authorization": "Bearer " + accessToken
+			}
+		});
+	},
+
+	subscribe(userId, leaseSeconds)
 	{
 		return axios.post(config.twitch.apiUrl + "/webhooks/hub", {
 			"hub.callback": config.twitch.statusCallback,
 			"hub.mode": "subscribe",
-			"hub.topic": config.twitch.apiUrl + "/streams?user_id=" + config.twitch.userId,
+			"hub.topic": config.twitch.apiUrl + "/streams?user_id=" + userId,
 			"hub.lease_seconds": leaseSeconds,
 			"hub.secret": config.twitch.secret
 		}, {
@@ -32,6 +42,24 @@ module.exports = {
 	getGame(id)
 	{
 		return axios.get(config.twitch.apiUrl + "/games?id=" + id, {
+			headers: {
+				"Client-ID": config.twitch.clientId
+			}
+		});
+	},
+
+	getUserById(id)
+	{
+		return axios.get(config.twitch.apiUrl + "/users?id=" + id, {
+			headers: {
+				"Client-ID": config.twitch.clientId
+			}
+		});
+	},
+
+	getUserByName(name)
+	{
+		return axios.get(config.twitch.apiUrl + "/users?login=" + name, {
 			headers: {
 				"Client-ID": config.twitch.clientId
 			}

@@ -12,12 +12,11 @@ module.exports = {
 		uri: "mongodb://localhost:27017/twitch-remote-chat"
 	},
 	twitch: {
-		userId: 475650268,
 		clientId: secret.clientId,
 		clientSecret: secret.clientSecret,
 		apiUrl: "https://api.twitch.tv/helix",
 		oauthUrl: "https://id.twitch.tv/oauth2",
-		statusCallback: "http://3.120.37.149:7332/stream-status-changed",
+		statusCallback: "http://" + secret.serverIp + ":7332/stream-status-changed",
 		secret: "xV!k?]GH+#Y!,fDuCZB]49gw#tspaZ)Q"
 	}
 

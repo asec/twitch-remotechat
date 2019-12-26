@@ -6,19 +6,20 @@ const EventEmitter = require("events"),
 class StreamSubscription extends EventEmitter
 {
 
-	constructor()
+	constructor(userId, leaseSeconds)
 	{
 		super();
+		this.userId = userId;
 		this.entity = null;
 		this.activeUntil = null;
-		this.leaseSeconds = 864000;
+		this.leaseSeconds = leaseSeconds;
 	}
 
 	load()
 	{
 		if (!this.entity)
 		{
-			schemas.Subscriptions.findOne({ type: "main" }, (err, item) => {
+			schemas.Subscriptions.findOne({ userId: this.userId }, (err, item) => {
 				if (err)
 				{
 					this.emit("error", err);
@@ -52,7 +53,7 @@ class StreamSubscription extends EventEmitter
 
 	reload()
 	{
-		schemas.Subscriptions.findOne({ type: "main" }, (err, item) => {
+		schemas.Subscriptions.findOne({ userId: this.userId }, (err, item) => {
 			if (err)
 			{
 				this.emit("error", err);
@@ -76,44 +77,57 @@ class StreamSubscription extends EventEmitter
 
 	isActive()
 	{
-		return (this.activeUntil.toLocaleString() > (new Date()).toLocaleString());
+		return (this.activeUntil > (new Date()));
 	}
 
 	renew()
 	{
-		schemas.Subscriptions.deleteMany({ type: "main" }, (err) => {
+		schemas.Subscriptions.deleteMany({ userId: this.userId }, (err) => {
 			if (err)
 			{
 				this.emit("error", err);
 				return;
 			}
 
-			TwitchApi.subscribe(this.leaseSeconds)
+			TwitchApi.getUserById(this.userId)
 				.then((response) => {
-					console.log("renewSubscription: called the api");
-					let data = {
-						type: "main",
-						topic: config.twitch.apiUrl + "/streams?user_id=" + config.twitch.userId,
-						callback: config.twitch.statusCallback,
-						expiration: this.leaseSeconds,
-						confirmed: false
-					};
-					const entity = new schemas.Subscriptions(data);
-					entity.save((err, item) => {
-						if (err)
-						{
-							this.emit("error", err);
-							return;
-						}
+					if (response && response.data && response.data.data.length && response.data.data[0])
+					{
+						const userData = response.data.data[0];
+						TwitchApi.subscribe(this.userId, this.leaseSeconds)
+							.then((response) => {
+								console.log("renewSubscription #" + this.userId + ": called the api");
+								let data = {
+									userId: this.userId,
+									userName: userData.login,
+									image: userData.profile_image_url,
+									topic: config.twitch.apiUrl + "/streams?user_id=" + this.userId,
+									callback: config.twitch.statusCallback,
+									expiration: this.leaseSeconds,
+									confirmed: false
+								};
+								const entity = new schemas.Subscriptions(data);
+								entity.save((err, item) => {
+									if (err)
+									{
+										this.emit("error", err);
+										return;
+									}
 
-						this.calcActivity(item.updated, item.expiration);
-						this.entity = item;
-						this.emit("ready");
-						return;
-					});
+									this.calcActivity(item.updated, item.expiration);
+									this.entity = item;
+									this.emit("ready");
+									return;
+								});
+							})
+							.catch((err) => {
+								this.emit("error", "There was an error while renewing the subscription!");
+								return;
+							});
+					}
 				})
 				.catch((err) => {
-					this.emit("error", "There was an error while renewing the subscription!");
+					this.emit("error", "The following twitch user does not exist: " + this.userId);
 					return;
 				});
 		});
@@ -121,4 +135,4 @@ class StreamSubscription extends EventEmitter
 
 }
 
-module.exports = new StreamSubscription();
+module.exports = StreamSubscription;
