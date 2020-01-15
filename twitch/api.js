@@ -39,6 +39,21 @@ module.exports = {
 		});
 	},
 
+	unsubscribe(userId, leaseSeconds)
+	{
+		return axios.post(config.twitch.apiUrl + "/webhooks/hub", {
+			"hub.callback": config.twitch.statusCallback,
+			"hub.mode": "unsubscribe",
+			"hub.topic": config.twitch.apiUrl + "/streams?user_id=" + userId,
+			"hub.lease_seconds": leaseSeconds,
+			"hub.secret": config.twitch.secret
+		}, {
+			headers: {
+				"Client-ID": config.twitch.clientId
+			}
+		});
+	},
+
 	getGame(id)
 	{
 		return axios.get(config.twitch.apiUrl + "/games?id=" + id, {

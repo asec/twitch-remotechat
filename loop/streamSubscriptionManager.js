@@ -146,6 +146,18 @@ class StreamSubscriptionManager extends EventEmitter
 		entity.load();
 	}
 
+	delete(userId)
+	{
+		TwitchApi.unsubscribe(userId, this.leaseSeconds)
+			.then((response) => {
+				this.entities = this.entities.filter(item => item.userId !== userId);
+			})
+			.catch((err) => {
+				this.emit("error", "There was an error while unsubscribing from the following streamer: " + userId);
+				return;
+			});
+	}
+
 }
 
 module.exports = new StreamSubscriptionManager();

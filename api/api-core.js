@@ -130,6 +130,20 @@ module.exports = {
 			route.process(req);
 		});
 
+		app.delete("/subscriptions/:id", (req, res) => {
+			const route = new routes.delete.subscription();
+			route.on("error", (message) => {
+				res.json({
+					success: false,
+					error: message
+				});
+			});
+			route.on("complete", (message) => {
+				res.json(message);
+			});
+			route.process(req, loop);
+		});
+
 	}
 
 };

@@ -14,6 +14,10 @@ module.exports = {
 
 	put: {
 		chat: require("./put/chat")
+	},
+
+	delete: {
+		subscription: require("./delete/subscription")
 	}
 
 };
