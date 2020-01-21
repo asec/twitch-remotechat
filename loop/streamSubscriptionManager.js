@@ -158,6 +158,14 @@ class StreamSubscriptionManager extends EventEmitter
 			});
 	}
 
+	reload()
+	{
+		for (let i = 0; i < this.entities.length; i++)
+		{
+			this.entities[i].reload();
+		}
+	}
+
 }
 
 module.exports = new StreamSubscriptionManager();
