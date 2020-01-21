@@ -4,7 +4,7 @@ const EventEmitter = require("events"),
 class ApiFunction extends EventEmitter
 {
 
-	process(req, loop)
+	process(req, loop, bot)
 	{
 		const id = req.params.id;
 
@@ -29,6 +29,7 @@ class ApiFunction extends EventEmitter
 				}
 
 				loop.streamSubscription.delete(id);
+				bot.part(subscription.userName);
 
 				this.emit("complete", {
 					success: true,

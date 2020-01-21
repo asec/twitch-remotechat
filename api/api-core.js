@@ -8,7 +8,7 @@ const express = require("express"),
 
 module.exports = {
 
-	init: function(loop)
+	init: function(loop, bot)
 	{
 		const app = express();
 		const http = httpWrapper.createServer(app);
@@ -85,7 +85,7 @@ module.exports = {
 			route.on("complete", (message) => {
 				res.json(message);
 			});
-			route.process(req, loop);
+			route.process(req, loop, bot);
 		});
 
 		app.get("/stream", (req, res) => {
@@ -141,7 +141,7 @@ module.exports = {
 			route.on("complete", (message) => {
 				res.json(message);
 			});
-			route.process(req, loop);
+			route.process(req, loop, bot);
 		});
 
 	}

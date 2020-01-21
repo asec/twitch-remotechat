@@ -1,7 +1,13 @@
 module.exports = {
 
-	clientId: "",
-	clientSecret: "",
-	serverIp: "localhost"
+	serverIp: "localhost",
+	twitchApp: {
+		clientId: "",
+		clientSecret: "",
+	},
+	twitchBot: {
+		username: "",
+		password: ""
+	}
 
 };

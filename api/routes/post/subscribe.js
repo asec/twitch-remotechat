@@ -6,7 +6,7 @@ const EventEmitter = require("events"),
 class ApiFunction extends EventEmitter
 {
 
-	process(req, loop)
+	process(req, loop, bot)
 	{
 		let username = req.body.username;
 
@@ -41,6 +41,7 @@ class ApiFunction extends EventEmitter
 							}
 
 							loop.add(response.data.data[0].id);
+							bot.join(response.data.data[0].login, response.data.data[0].id);
 							this.emit("complete", {
 								success: true,
 								userId: response.data.data[0].id

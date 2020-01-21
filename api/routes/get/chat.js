@@ -33,9 +33,37 @@ class ApiFunction extends EventEmitter
 
 			if (!stream)
 			{
-				this.emit("complete", {
-					success: true,
-					data: []
+				schemas.Subscriptions.findOne({ userId }, (err, subscription) => {
+					if (err)
+					{
+						this.emit("error", err);
+						return;
+					}
+
+					if (!subscription || !subscription._id)
+					{
+						this.emit("error", "There is no subscription with that id: " + userId);
+						return;
+					}
+
+					schemas.Chats.find({ channel: '#' + subscription.userName, stream: null }).sort({ _id: -1 }).exec((err, items) => {
+						if (err)
+						{
+							this.emit("error", err);
+							return;
+						}
+
+						const data = [];
+						for (let i = 0; i < items.length; i++)
+						{
+							data.push(new transform.Chats(items[i]));
+						}
+
+						this.emit("complete", {
+							success: true,
+							data: data
+						});
+					});
 				});
 				return;
 			}

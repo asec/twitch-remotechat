@@ -8,14 +8,15 @@ class ApiFunction extends EventEmitter
 
 	process(req, io)
 	{
-		schemas.Streams.findOne().sort({ updated: -1 }).exec((err, stream) => {
+		const userId = req.body.user;
+		schemas.Streams.findOne({ userId }).sort({ updated: -1 }).exec((err, stream) => {
 			if (err)
 			{
 				this.emit("error", err);
 				return;
 			}
 
-			let data = {
+			const data = {
 				channel: req.body.channel,
 				context: req.body.context,
 				message: req.body.message
