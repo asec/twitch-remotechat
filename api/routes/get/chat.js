@@ -46,7 +46,7 @@ class ApiFunction extends EventEmitter
 						return;
 					}
 
-					schemas.Chats.find({ channel: '#' + subscription.userName, stream: null }).sort({ _id: -1 }).exec((err, items) => {
+					schemas.Chats.find({ channel: '#' + subscription.userName, stream: null }).sort({ _id: 1 }).exec((err, items) => {
 						if (err)
 						{
 							this.emit("error", err);
