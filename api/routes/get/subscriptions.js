@@ -19,9 +19,52 @@ class ApiFunction extends EventEmitter
 			{
 				data.push(new transform.Subscriptions(items[i]));
 			}
-			this.emit("complete", {
-				success: true,
-				data: data
+
+			const grabStreamState = (item) => {
+				return new Promise((resolve, reject) => {
+					schemas.Streams.findOne({ userId: item.userId }).sort({ updated: -1 }).exec((err, latest) => {
+						if (err)
+						{
+							reject(err);
+						}
+						else if (!latest)
+						{
+							reject("No streams for " + item.userId + " yet.");
+						}
+						else
+						{
+							resolve({
+								isLive: latest.isLive
+							});
+						}
+					});
+				});
+			};
+			
+			const updateWithStreamState = async (items) => {
+				for (let i = 0; i < items.length; i++)
+				{
+					try
+					{
+						items[i].isLive = (await grabStreamState(items[i])).isLive;
+					}
+					catch (err)
+					{
+						items[i].isLive = false;
+						//console.log(err);
+					}
+				}
+
+				return items;
+			}
+
+			updateWithStreamState(data).then((data) => {
+
+				this.emit("complete", {
+					success: true,
+					data: data
+				});
+
 			});
 		});
 	}
