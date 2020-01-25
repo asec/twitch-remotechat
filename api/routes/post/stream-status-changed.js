@@ -9,10 +9,16 @@ class ApiFunction extends EventEmitter
 
 	process(req, io)
 	{
-		var headers = req.headers;
 		var data = req.body.data;
+		const userId = req.query.userId;
 
-		schemas.Streams.updateMany({ isLive: true }, { isLive: false }, (err, items) => {
+		if (req.twitch_hub && req.twitch_hex !== req.twitch_signature)
+		{
+			this.emit("error", "This request has an invalid signature.");
+			return;
+		}
+
+		schemas.Streams.updateMany({ isLive: true, userId }, { isLive: false }, (err, items) => {
 			if (err)
 			{
 				this.emit("error", err);
@@ -22,7 +28,8 @@ class ApiFunction extends EventEmitter
 			if (!data || !data.length)
 			{
 				io.emit("stream-status-changed", {
-					isLive: false
+					isLive: false,
+					userId
 				});
 
 				this.emit("complete", {

@@ -23,6 +23,7 @@ module.exports = {
 	twitchBot: {
 		username: secret.twitchBot.username,
 		password: secret.twitchBot.password
-	}
+	},
+	encryptionKey: secret.encryptionKey
 
 };

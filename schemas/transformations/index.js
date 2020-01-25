@@ -1,8 +1,9 @@
 module.exports = {
 
-	Chats: require("./chats"),
-	Games: require("./games"),
-	Streams: require("./streams"),
-	Subscriptions: require("./subscriptions")
+	Chats: require('./chats'),
+	Games: require('./games'),
+	Streams: require('./streams'),
+	Subscriptions: require('./subscriptions'),
+	Version: require('./version')
 
 };

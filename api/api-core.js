@@ -4,7 +4,8 @@ const express = require("express"),
 	cors = require("cors"),
 	bodyParser = require("body-parser"),
 	config = require("../config/config"),
-	routes = require("./routes/index");
+	routes = require("./routes/index"),
+	crypto = require('crypto');
 
 module.exports = {
 
@@ -14,7 +15,22 @@ module.exports = {
 		const http = httpWrapper.createServer(app);
 		const io = socketIo(http);
 		app.use(cors());
-		app.use(bodyParser.json());
+		app.use(bodyParser.json({
+			verify: function(req, res, buf, encoding) {
+				// is there a hub to verify against
+				req.twitch_hub = false;
+				if (req.headers && req.headers['x-hub-signature']) {
+					req.twitch_hub = true;
+		
+					var xHub = req.headers['x-hub-signature'].split('=');
+		
+					req.twitch_hex = crypto.createHmac(xHub[0], config.twitch.secret)
+						.update(buf)
+						.digest('hex');
+					req.twitch_signature = xHub[1];
+				}
+			}
+		}));
 		app.use(bodyParser.urlencoded({ extended: true }));
 
 		http.listen(config.api.port, () => {
@@ -142,6 +158,20 @@ module.exports = {
 				res.json(message);
 			});
 			route.process(req, loop, bot);
+		});
+
+		app.put("/version", (req, res) => {
+			const route = new routes.put.version();
+			route.on("error", (message) => {
+				res.json({
+					success: false,
+					error: message
+				});
+			});
+			route.on("complete", (message) => {
+				res.json(message);
+			});
+			route.process(req, io);
 		});
 
 	}

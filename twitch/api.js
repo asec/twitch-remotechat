@@ -27,7 +27,7 @@ module.exports = {
 	subscribe(userId, leaseSeconds)
 	{
 		return axios.post(config.twitch.apiUrl + "/webhooks/hub", {
-			"hub.callback": config.twitch.statusCallback,
+			"hub.callback": config.twitch.statusCallback + "?userId=" + userId,
 			"hub.mode": "subscribe",
 			"hub.topic": config.twitch.apiUrl + "/streams?user_id=" + userId,
 			"hub.lease_seconds": leaseSeconds,

@@ -8,6 +8,7 @@ module.exports = {
 	twitchBot: {
 		username: "",
 		password: ""
-	}
+	},
+	encryptionKey: "" // 32 bytes long string
 
 };
