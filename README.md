@@ -72,7 +72,7 @@ Lists all of the currently active subscriptions in the API.
     "success": true,
     "data": [{
         "userId": "475650268",
-        "userName": "asectortst",
+        "userName": "streamer",
         "image": "https://static-cdn.jtvnw.net/user-default-pictures-uv/294c98b5-e34d-42cd-a8f0-140b72fba9b0-profile_image-300x300.png",
         "confirmed": true
 	}]
@@ -104,14 +104,14 @@ Name | Type | Required? | Description
         "title": "Another test stream.",
         "isLive": false,
         "userId": "475650268",
-        "userName": "asectortst",
+        "userName": "streamer",
         "game": {
             "id": "29433",
             "name": "Dark Souls",
             "image": "https://static-cdn.jtvnw.net/ttv-boxart/Dark%20Souls-{width}x{height}.jpg"
         },
         "type": "live",
-        "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_asectortst-{width}x{height}.jpg"
+        "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_streamer-{width}x{height}.jpg"
     }]
 }
 ```
@@ -138,14 +138,14 @@ Name | Type | Required? | Description
 {
     "success": true,
     "data": [{
-        "channel": "#asectortst",
+        "channel": "#streamer",
         "context": {
             "badge-info": null,
             "badges": {
                 "broadcaster": "1"
             },
             "color": null,
-            "display-name": "asectortst",
+            "display-name": "streamer",
             "emote-only": false,
             "emotes": {
                 "25": [
@@ -164,7 +164,7 @@ Name | Type | Required? | Description
             "emotes-raw": "25:0-4/28087:6-12/86:14-23",
             "badge-info-raw": null,
             "badges-raw": "broadcaster/1",
-            "username": "asectortst",
+            "username": "streamer",
             "message-type": "chat"
         },
         "message": "Kappa test message"
@@ -183,9 +183,22 @@ Gets the current status of the chatbot. It can be useful to check on it when it 
 ```json
 {
     "success": true,
-    "options": {},
     "readyState": "OPEN",
-    "channels": []
+    "channels": [],
+    "options": {
+        "connection": {
+            "reconnect": true,
+            "secure": true
+        },
+        "identity": {
+            "username": "botname",
+            "password": ""
+        },
+        "channels": [
+            "#streamer"
+        ],
+        "options": {}
+    }
 }
 ```
 
@@ -207,14 +220,14 @@ This event notifies the client that a stream status has changed. The message con
     "title": "Another test stream.",
     "isLive": false,
     "userId": "475650268",
-    "userName": "asectortst",
+    "userName": "streamer",
     "game": {
         "id": "29433",
         "name": "Dark Souls",
         "image": "https://static-cdn.jtvnw.net/ttv-boxart/Dark%20Souls-{width}x{height}.jpg"
     },
     "type": "live",
-    "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_asectortst-{width}x{height}.jpg"
+    "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_streamer-{width}x{height}.jpg"
 }
 ```
 ---
@@ -227,14 +240,14 @@ This event notifies the client that a single new chat message has just arrived f
 **Parameter Example:**
 ```json
 {
-    "channel": "#asectortst",
+    "channel": "#streamer",
     "context": {
         "badge-info": null,
         "badges": {
             "broadcaster": "1"
         },
         "color": null,
-        "display-name": "asectortst",
+        "display-name": "streamer",
         "emote-only": false,
         "emotes": {
             "25": [
@@ -253,7 +266,7 @@ This event notifies the client that a single new chat message has just arrived f
         "emotes-raw": "25:0-4/28087:6-12/86:14-23",
         "badge-info-raw": null,
         "badges-raw": "broadcaster/1",
-        "username": "asectortst",
+        "username": "streamer",
         "message-type": "chat"
     },
     "message": "Kappa test message"

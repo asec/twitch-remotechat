@@ -9,9 +9,9 @@ class ApiFunction extends EventEmitter
 		options.identity.password = "";
 		this.emit("complete", {
 			success: true,
-			options,
 			readyState: bot.bot.readyState(),
-			channels: bot.bot.getChannels()
+			channels: bot.bot.getChannels(),
+			options
 		});
 		return;
 	}
