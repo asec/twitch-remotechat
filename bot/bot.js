@@ -23,6 +23,10 @@ module.exports = {
 			}
 
 			this.bot = new tmi.Client({
+				connection: {
+					reconnect: true,
+					secure: true
+				},
 				identity: {
 					username: config.twitchBot.username,
 					password: config.twitchBot.password
@@ -38,6 +42,15 @@ module.exports = {
 				if (self)
 				{
 					return;
+				}
+
+				if (message.toLowerCase() === "!ping")
+				{
+					this.bot.say(target, `${ (new Date()).toLocaleString() }: Pong`);
+				}
+				else if (message.toLowerCase() === "!channels")
+				{
+					this.bot.say(target, `Channels: ${ this.bot.getChannels() }`);
 				}
 
 				const username = target.substring(1);
