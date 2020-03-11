@@ -1,6 +1,7 @@
-const config = require("../config/config"),
-	at = require("./accessToken"),
-	ss = require("./streamSubscriptionManager");
+const config = require('../config/config'),
+	at = require('./accessToken'),
+	ss = require('./streamSubscriptionManager'),
+	log = require('../utils/log');
 
 class Loop
 {
@@ -19,10 +20,10 @@ class Loop
 		this.streamSubscription = ss;
 
 		this.accessToken.on("error", (err) => {
-			console.error(err);
+			log.error("Loop.init: renewing access token", err);
 		});
 		this.accessToken.on("ready", () => {
-			console.log(this.accessToken.get());
+			log.success(`Loop.init: got access token ${this.accessToken.get()}`);
 			if (!this.initialized)
 			{
 				this.streamSubscription.load(this.accessToken.get());
@@ -33,7 +34,7 @@ class Loop
 			}
 		});
 		this.streamSubscription.on("error", (err) => {
-			console.error(err);
+			log.error("Loop.init: renewing subscriptions", err);
 		});
 		this.streamSubscription.on("ready", () => {
 			this.initialized = true;

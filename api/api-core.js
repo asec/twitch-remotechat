@@ -5,7 +5,8 @@ const express = require("express"),
 	bodyParser = require("body-parser"),
 	config = require("../config/config"),
 	routes = require("./routes/index"),
-	crypto = require('crypto');
+	crypto = require('crypto'),
+	log = require('../utils/log');
 
 module.exports = {
 
@@ -34,14 +35,14 @@ module.exports = {
 		app.use(bodyParser.urlencoded({ extended: true }));
 
 		http.listen(config.api.port, () => {
-			console.info("Server started on " + config.api.port);
+			log.success("API: Server started on " + config.api.port)
 		});
 
 		io.on("connection", (socket) => {
-			console.log("WS: Connected @" + (new Date()).toLocaleString());
+			log.info(`API WS: Client connected`, { ip: socket.handshake.address });
 
 			socket.on("disconnect", (reason) => {
-				console.log("WS: Disconnected @" + (new Date()).toLocaleString(), reason);
+				log.info(`API WS: Client disconnected`, { ip: socket.handshake.address, reason });
 			});
 		});
 

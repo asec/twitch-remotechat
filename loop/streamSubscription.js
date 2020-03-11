@@ -1,7 +1,8 @@
-const EventEmitter = require("events"),
-	schemas = require("../schemas/index"),
-	TwitchApi = require("../twitch/api"),
-	config = require("../config/config");
+const EventEmitter = require('events'),
+	schemas = require('../schemas/index'),
+	TwitchApi = require('../twitch/api'),
+	config = require('../config/config'),
+	log = require('../utils/log');
 
 class StreamSubscription extends EventEmitter
 {
@@ -96,7 +97,7 @@ class StreamSubscription extends EventEmitter
 						const userData = response.data.data[0];
 						TwitchApi.subscribe(this.userId, this.leaseSeconds)
 							.then((response) => {
-								console.log("renewSubscription #" + this.userId + ": called the api");
+								log.info("renewSubscription #" + this.userId + ": called the api", response);
 								let data = {
 									userId: this.userId,
 									userName: userData.login,

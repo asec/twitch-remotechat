@@ -1,6 +1,7 @@
-const EventEmitter = require("events"),
-	schemas = require("../schemas/index"),
-	TwitchApi = require("../twitch/api");
+const EventEmitter = require('events'),
+	schemas = require('../schemas/index'),
+	TwitchApi = require('../twitch/api'),
+	log = require('../utils/log');
 
 class AccessToken extends EventEmitter
 {
@@ -70,7 +71,7 @@ class AccessToken extends EventEmitter
 
 			TwitchApi.getAccessToken()
 				.then((response) => {
-					console.log("renewAccessToken: called the api");
+					log.info("renewAccessToken: called the api", response);
 					if (!response.data || !response.data.access_token)
 					{
 						this.emit("error", "There was an error getting the access token!");

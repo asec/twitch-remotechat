@@ -5,6 +5,7 @@ module.exports = {
 	Streams: require('./streams'),
 	Games: require('./games'),
 	Chats: require('./chats'),
-	Version: require('./version')
+	Version: require('./version'),
+	Log: require('./logs')
 
 };

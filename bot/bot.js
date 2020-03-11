@@ -1,7 +1,8 @@
 const tmi = require('tmi.js'),
 	config = require('../config/config'),
 	schemas = require('../schemas'),
-	axios = require('axios');
+	axios = require('axios'),
+	log = require('../utils/log');
 
 module.exports = {
 
@@ -13,7 +14,7 @@ module.exports = {
 		schemas.Subscriptions.find({}, (err, items) => {
 			if (err)
 			{
-				console.error(err);
+				log.error("Twitchbot.init, getting subscriptions", err);
 				return;
 			}
 
@@ -35,7 +36,11 @@ module.exports = {
 			});
 
 			this.bot.on("connected", (addr, port) => {
-				console.log(`Twitchbot: Connected to ${addr}:${port}`);
+				log.success(`Twitchbot: Connected to ${addr}:${port}`);
+			});
+
+			this.bot.on("disconnected", (reason) => {
+				log.error(`Disconnected: ${reason}`);
 			});
 
 			this.bot.on("message", (target, context, message, self) => {
@@ -44,19 +49,21 @@ module.exports = {
 					return;
 				}
 
-				if (message.toLowerCase() === "!twt-ping")
+				/*if (message.toLowerCase() === "!twt-ping")
 				{
 					this.bot.say(target, `${ (new Date()).toLocaleString() }: Pong`);
+					return;
 				}
 				else if (message.toLowerCase() === "!twt-channels")
 				{
 					this.bot.say(target, `Channels: ${ this.bot.getChannels() }`);
-				}
+					return;
+				}*/
 
 				const username = target.substring(1);
 				if (!this.channels[username])
 				{
-					console.error("The following user could not be found: " + username + ". The bot must be lost.");
+					log.error("The following user could not be found: " + username + ". The bot must be lost.");
 					return;
 				}
 
@@ -69,12 +76,12 @@ module.exports = {
 				.then((response) => {
 					if (!response.data.success)
 					{
-						console.warn(response.data.error);
+						log.warning(response.data.error)
 						return;
 					}
 				})
 				.catch((err) => {
-					console.error(err);
+					log.error("Twitchbot on message, sending with axios", err);
 				});
 			});
 
@@ -86,16 +93,16 @@ module.exports = {
 	{
 		if (this.channels[channel])
 		{
-			console.warn("Twitchbot: The bot should already be in this channel", channel);
+			log.warning(`Twitchbot: The bot should already be in this channel: ${channel}`);
 			return;
 		}
 		this.channels[channel] = userId;
 		this.bot.join(channel)
 			.then((data) => {
-				console.log("Twitchbot: Joined the following channel(s)", data);
+				log.info("Twitchbot: Joined the following channel(s)", data);
 			})
 			.catch((err) => {
-				console.error(err);
+				log.error("Twitchbot join failed", err);
 			});
 	},
 
@@ -104,10 +111,10 @@ module.exports = {
 		this.bot.part(channel)
 			.then((data) => {
 				this.channels[channel] = null;
-				console.log("Twitchbot: Left the following channel(s)", data);
+				log.info("Twitchbot: Left the following channel(s)", data);
 			})
 			.catch((err) => {
-				console.error(err);
+				log.error("Twitchbot part failed", err);
 			});
 	}
 
