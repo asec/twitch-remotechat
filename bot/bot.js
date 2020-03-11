@@ -44,11 +44,11 @@ module.exports = {
 					return;
 				}
 
-				if (message.toLowerCase() === "!ping")
+				if (message.toLowerCase() === "!twt-ping")
 				{
 					this.bot.say(target, `${ (new Date()).toLocaleString() }: Pong`);
 				}
-				else if (message.toLowerCase() === "!channels")
+				else if (message.toLowerCase() === "!twt-channels")
 				{
 					this.bot.say(target, `Channels: ${ this.bot.getChannels() }`);
 				}
