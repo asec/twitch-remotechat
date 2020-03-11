@@ -9,6 +9,7 @@ A RESTful API (and websocket push interface) written for `nodejs` that you can u
 	1. [Get Subscriptions](#get-subscriptions)
 	1. [Get Stream](#get-stream)
 	1. [Get Chat](#get-chat)
+	1. [Get Chatbot status](#get-chatbot-status)
 1. [Websocket API](#websocket-api)
 	1. [Message: Stream status changed](#message-stream-status-changed)
 	1. [Message: Chat](#message-chat)
@@ -70,10 +71,10 @@ Lists all of the currently active subscriptions in the API.
 {
     "success": true,
     "data": [{
-		"userId": "475650268",
-		"userName": "asectortst",
-		"image": "https://static-cdn.jtvnw.net/user-default-pictures-uv/294c98b5-e34d-42cd-a8f0-140b72fba9b0-profile_image-300x300.png",
-		"confirmed": true
+        "userId": "475650268",
+        "userName": "asectortst",
+        "image": "https://static-cdn.jtvnw.net/user-default-pictures-uv/294c98b5-e34d-42cd-a8f0-140b72fba9b0-profile_image-300x300.png",
+        "confirmed": true
 	}]
 }
 ```
@@ -98,7 +99,7 @@ Name | Type | Required? | Description
 {
     "success": true,
     "data": [{
-	"id": "5df8dc1a89967957cce261c1",
+    "id": "5df8dc1a89967957cce261c1",
         "sid": "318837873",
         "title": "Another test stream.",
         "isLive": false,
@@ -115,7 +116,9 @@ Name | Type | Required? | Description
 }
 ```
 ---
+
 ### Get Chat
+
 ```http
 GET /chat
 ```
@@ -135,39 +138,57 @@ Name | Type | Required? | Description
 {
     "success": true,
     "data": [{
-		"channel": "#asectortst",
-		"context": {
-			"badge-info": null,
-			"badges": {
-				"broadcaster": "1"
-			},
-			"color": null,
-			"display-name": "asectortst",
-			"emote-only": false,
-			"emotes": {
-				"25": [
-					"0-4"
-				]
-			},
-			"flags": null,
-			"id": "74613814-1c0f-4dcd-8a72-8656826bbf0e",
-			"mod": false,
-			"room-id": "475650268",
-			"subscriber": false,
-			"tmi-sent-ts": "1576610861651",
-			"turbo": false,
-			"user-id": "475650268",
-			"user-type": null,
-			"emotes-raw": "25:0-4/28087:6-12/86:14-23",
-			"badge-info-raw": null,
-			"badges-raw": "broadcaster/1",
-			"username": "asectortst",
-			"message-type": "chat"
-		},
-		"message": "Kappa test message"
-	}]
+        "channel": "#asectortst",
+        "context": {
+            "badge-info": null,
+            "badges": {
+                "broadcaster": "1"
+            },
+            "color": null,
+            "display-name": "asectortst",
+            "emote-only": false,
+            "emotes": {
+                "25": [
+                    "0-4"
+                ]
+            },
+            "flags": null,
+            "id": "74613814-1c0f-4dcd-8a72-8656826bbf0e",
+            "mod": false,
+            "room-id": "475650268",
+            "subscriber": false,
+            "tmi-sent-ts": "1576610861651",
+            "turbo": false,
+            "user-id": "475650268",
+            "user-type": null,
+            "emotes-raw": "25:0-4/28087:6-12/86:14-23",
+            "badge-info-raw": null,
+            "badges-raw": "broadcaster/1",
+            "username": "asectortst",
+            "message-type": "chat"
+        },
+        "message": "Kappa test message"
+    }]
 }
 ```
+
+### Get Chatbot status
+
+```http
+GET /bot/status
+```
+Gets the current status of the chatbot. It can be useful to check on it when it disconnects randomly and can't reconnect. This way the server doesn't have to be restarted to get info on the bot.
+
+**Example Response:**
+```json
+{
+    "success": true,
+    "options": {},
+    "readyState": "OPEN",
+    "channels": []
+}
+```
+
 
 ## Websocket API
 
@@ -182,18 +203,18 @@ This event notifies the client that a stream status has changed. The message con
 **Parameter Example:**
 ```json
 {
-	"id": "318837873",
-	"title": "Another test stream.",
-	"isLive": false,
-	"userId": "475650268",
-	"userName": "asectortst",
-	"game": {
-		"id": "29433",
-		"name": "Dark Souls",
-		"image": "https://static-cdn.jtvnw.net/ttv-boxart/Dark%20Souls-{width}x{height}.jpg"
-	},
-	"type": "live",
-	"thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_asectortst-{width}x{height}.jpg"
+    "id": "318837873",
+    "title": "Another test stream.",
+    "isLive": false,
+    "userId": "475650268",
+    "userName": "asectortst",
+    "game": {
+        "id": "29433",
+        "name": "Dark Souls",
+        "image": "https://static-cdn.jtvnw.net/ttv-boxart/Dark%20Souls-{width}x{height}.jpg"
+    },
+    "type": "live",
+    "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_asectortst-{width}x{height}.jpg"
 }
 ```
 ---
@@ -206,36 +227,36 @@ This event notifies the client that a single new chat message has just arrived f
 **Parameter Example:**
 ```json
 {
-	"channel": "#asectortst",
-	"context": {
-		"badge-info": null,
-		"badges": {
-			"broadcaster": "1"
-		},
-		"color": null,
-		"display-name": "asectortst",
-		"emote-only": false,
-		"emotes": {
-			"25": [
-				"0-4"
-			]
-		},
-		"flags": null,
-		"id": "74613814-1c0f-4dcd-8a72-8656826bbf0e",
-		"mod": false,
-		"room-id": "475650268",
-		"subscriber": false,
-		"tmi-sent-ts": "1576610861651",
-		"turbo": false,
-		"user-id": "475650268",
-		"user-type": null,
-		"emotes-raw": "25:0-4/28087:6-12/86:14-23",
-		"badge-info-raw": null,
-		"badges-raw": "broadcaster/1",
-		"username": "asectortst",
-		"message-type": "chat"
-	},
-	"message": "Kappa test message"
+    "channel": "#asectortst",
+    "context": {
+        "badge-info": null,
+        "badges": {
+            "broadcaster": "1"
+        },
+        "color": null,
+        "display-name": "asectortst",
+        "emote-only": false,
+        "emotes": {
+            "25": [
+                "0-4"
+            ]
+        },
+        "flags": null,
+        "id": "74613814-1c0f-4dcd-8a72-8656826bbf0e",
+        "mod": false,
+        "room-id": "475650268",
+        "subscriber": false,
+        "tmi-sent-ts": "1576610861651",
+        "turbo": false,
+        "user-id": "475650268",
+        "user-type": null,
+        "emotes-raw": "25:0-4/28087:6-12/86:14-23",
+        "badge-info-raw": null,
+        "badges-raw": "broadcaster/1",
+        "username": "asectortst",
+        "message-type": "chat"
+    },
+    "message": "Kappa test message"
 }
 ```
 

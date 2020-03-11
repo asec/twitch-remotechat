@@ -4,7 +4,11 @@ module.exports = {
 		streamStatusChanged: require('./get/stream-status-changed'),
 		stream: require('./get/stream'),
 		chat: require('./get/chat'),
-		subscriptions: require('./get/subscriptions')
+		subscriptions: require('./get/subscriptions'),
+
+		bot: {
+			status: require('./get/bot/status')
+		}
 	},
 
 	post: {

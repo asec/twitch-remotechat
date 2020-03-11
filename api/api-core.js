@@ -175,6 +175,20 @@ module.exports = {
 			route.process(req, io);
 		});
 
+		app.get("/bot/status", (req, res) => {
+			const route = new routes.get.bot.status();
+			route.on("error", (message) => {
+				res.json({
+					success: false,
+					error: message
+				});
+			});
+			route.on("complete", (message) => {
+				res.json(message);
+			});
+			route.process(req, bot);
+		});
+
 	}
 
 };

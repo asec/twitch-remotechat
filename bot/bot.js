@@ -40,7 +40,11 @@ module.exports = {
 			});
 
 			this.bot.on("disconnected", (reason) => {
-				log.error(`Disconnected: ${reason}`);
+				log.error(`Twithbot: Disconnected, ${reason}`);
+			});
+
+			this.bot.on("reconnect", () => {
+				log.info(`Twithbot: Trying to reconnect`);
 			});
 
 			this.bot.on("message", (target, context, message, self) => {
