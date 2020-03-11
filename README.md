@@ -75,7 +75,7 @@ Lists all of the currently active subscriptions in the API.
         "userName": "streamer",
         "image": "https://static-cdn.jtvnw.net/user-default-pictures-uv/294c98b5-e34d-42cd-a8f0-140b72fba9b0-profile_image-300x300.png",
         "confirmed": true
-	}]
+    }]
 }
 ```
 ---
